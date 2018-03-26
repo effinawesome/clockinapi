@@ -1,6 +1,6 @@
 #!login/bin/python3
 import os
-from flask import Flask,jsonify, abort, make_response, request,g, url_for
+from flask import Flask,jsonify, abort, make_response, request,g, url_for,render_template
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Api, Resource, reqparse, fields, marshal
 from flask_sqlalchemy import SQLAlchemy
@@ -102,12 +102,14 @@ def get_resource():
 
 job_fields = {
     'jobname' : fields.String,
+    'username': fields.String,
     'incoords' : fields.String,
     'intime' : fields.String,
     'outcoords' : fields.String,
     'outtime' : fields.String,
     'uri' : fields.Url('job')
 }
+
 class JobListAPI(Resource):
     decorators = [auth.login_required]
     def __init__(self):
@@ -166,30 +168,11 @@ class JobAPI(Resource):
 api.add_resource(JobListAPI, '/clockin/api/jobs', endpoint = 'jobs')
 api.add_resource(JobAPI, '/clockin/api/jobs/<int:id>', endpoint = 'job')
 
-jobs = [
-    {
-        'id':1,
-        'jobname':u'Michaels House',
-        'incoords': u'32.759717,-95.141286',
-        'intime':u'1200'
-    },
-    {
-        'id':2,
-        'jobname':u'2222Michaels House',
-        'incoords': u'222232.759717,-95.141286',
-        'intime':u'22221200'
-    }
-]
+jobs = [{'id':1}]
 
 @app.route('/')
 def index():
-    return "Hello, world!"
-
-@auth.get_password
-def get_password(username):
-    if username == 'miguel':
-        return 'python'
-    return None
+    return render_template('index.html')
 
 @auth.error_handler
 def unauthorized():
