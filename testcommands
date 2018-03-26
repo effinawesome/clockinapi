@@ -1,0 +1,16 @@
+create new user
+curl -i -X POST -H "Content-type: application/json" -d '{"username":"michael","password":"testpass"}' http://localhost:5000/clockin/api/users
+
+create new job
+curl -i -X POST -H "Content-type: application/json" -d '{"jobname":"testhouse","username":"michael","intime":"1130","incoords":"32,-95"}' http://localhost:5000/clockin/api/users
+
+
+Update job with outtime and outcoords
+curl -u michael:testpass -i -X PUT -H "Content-type: application/json" -d '{"outcoords":"8675308","outtime":"1300"}' http://localhost:5000/clockin/api/jobs/2
+
+
+list jobs
+curl -u michael:testpass -i http://localhost:5000/clockin/api/jobs
+
+get token
+curl -u michael:testpass -i -X GET http://localhost:5000/clockin/api/token
