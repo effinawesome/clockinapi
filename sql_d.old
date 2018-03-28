@@ -1,0 +1,27 @@
+import os
+import sys
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
+
+Base = declarative_base()
+
+class Employee(Base):
+    __tablename__ = 'employee'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable = False)
+
+class Clockin(Base):
+    __tablename__ = 'clockins'
+    jobid = Column(Integer, primary_key=True)
+    job_name = Column(String(250))
+    intime = Column(String(250),nullable=False)
+    incoords = Column(String(250))
+    outtime = Column(String(250),nullable=False)
+    outcoords = Column(String(250))
+    employee_id = Column(Integer, ForeignKey('employee.id'))
+    employee = relationship(Employee)
+
+engine = create_engine('sqlite:///clockinv2.db')
+Base.metadata.create_all(engine)
